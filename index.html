@@ -6,7 +6,6 @@
   </head>
   <body>
     <script>
-
       $(document).ready(function(){
         var $body = $('body');
 
@@ -15,11 +14,16 @@
           var numTweets = streams.home.length;
           for (var i = 0; i < 10; i++) {
             var tweet = streams.home[numTweets - i - 1];
-            var $tweet = $('<div></div>');
-            $tweet.text('@' + tweet.user + ': ' + tweet.message + '--------' + tweet.created_at);
-            $tweet.appendTo($body);
+            var $tweet = $('<div class="tweet"></div>');
+            var $tweeter = $('<h4 class="tweeter">' + tweet.user + '</h4>');
+            var $message = $('<p class="message">' + tweet.message + '</p>');
+            var $timestamp = $('<p class="timestamp">' + tweet.created_at + '</p>');
+            $body.append($tweet);
+            $tweet.append($tweeter);
+            $tweet.append($message);
+            $tweet.append($timestamp);
           }
-        };
+        }();
 
         // Automatically display the latest tweets
         // after a random period of time
@@ -28,9 +32,8 @@
           setTimeout(scheduleNextDisplay, Math.random() * 1500);
         };
         scheduleNextDisplay();
-
       });
-
     </script>
+
   </body>
 </html>
