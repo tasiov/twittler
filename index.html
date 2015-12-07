@@ -9,16 +9,25 @@
 
       $(document).ready(function(){
         var $body = $('body');
-        $body.html('');
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
-        }
+        var displayTweets = function() {
+          $body.html('');
+          var numTweets = streams.home.length;
+          for (var i = 0; i < 10; i++) {
+            var tweet = streams.home[numTweets - i - 1];
+            var $tweet = $('<div></div>');
+            $tweet.text('@' + tweet.user + ': ' + tweet.message);
+            $tweet.appendTo($body);
+          }
+        };
+
+        // Automatically display the latest tweets
+        // after a random period of time
+        var scheduleNextDisplay = function(){
+          displayTweets();
+          setTimeout(scheduleNextDisplay, Math.random() * 1500);
+        };
+        scheduleNextDisplay();
 
       });
 
