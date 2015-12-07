@@ -16,7 +16,7 @@
           for (var i = 0; i < 10; i++) {
             var tweet = streams.home[numTweets - i - 1];
             var $tweet = $('<div></div>');
-            $tweet.text('@' + tweet.user + ': ' + tweet.message);
+            $tweet.text('@' + tweet.user + ': ' + tweet.message + '--------' + tweet.created_at);
             $tweet.appendTo($body);
           }
         };
