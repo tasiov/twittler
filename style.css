@@ -1,4 +1,4 @@
-h1, h2, h4, div, p  {
+h1, h2, span, div, p  {
   text-align: center;
 }
 h1, h2 {
@@ -16,11 +16,13 @@ h2 {
 }
 span:hover {
   color: #00ccff;
+  cursor: default;
 }
 .tweeter, .message, .timestamp {
   color: #666666;
 }
 .tweeter {
+  font-weight: bold;
   font-size: 24px;
   margin: 0 0 10px;
 }
@@ -31,4 +33,7 @@ span:hover {
 .timestamp {
   font-size: 14px;
   margin: 0 0 30px;
+}
+.home {
+  font-size: 14px;
 }
