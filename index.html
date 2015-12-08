@@ -3,6 +3,8 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <link rel="stylesheet" type="text/css" href="normalize.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
     <h1>twittler</h2>
@@ -13,30 +15,61 @@
     <script>
       $(document).ready(function(){
         var $tweetBody = $('#all-tweets');
+        var timeoutId;
 
         var displayTweets = function() {
           $tweetBody.empty();
           var numTweets = streams.home.length;
           for (var i = 0; i < 10; i++) {
             var tweet = streams.home[numTweets - i - 1];
-            var $tweet = $('<div class="tweet"></div>');
-            var $tweeter = $('<h4 class="tweeter">' + tweet.user + '</h4>');
-            var $message = $('<p class="message">' + tweet.message + '</p>');
-            var $timestamp = $('<p class="timestamp">' + tweet.created_at + '</p>');
-            $tweetBody.append($tweet);
-            $tweet.append($tweeter);
-            $tweet.append($message);
-            $tweet.append($timestamp);
+            showTweet(tweet, true);
           }
         };
 
         // Automatically display the latest tweets
         // after a random period of time
-        var scheduleNextDisplay = function(){
+        var scheduleNextDisplay = function(home){
           displayTweets();
-          setTimeout(scheduleNextDisplay, Math.random() * 1500);
+          timeoutId = setTimeout(scheduleNextDisplay, Math.random() * 3000);
         };
         scheduleNextDisplay();
+
+        function showTweet(tweet, flag) {
+            var $tweet = $('<div class="tweet"></div>');
+            if (flag) {
+              var $tweeter = $('<span class="tweeter">@' + tweet.user + '</span>');
+            }
+            var $message = $('<p class="message">' + tweet.message + '</p>');
+            var $timestamp = $('<p class="timestamp">' + tweet.created_at + '</p>');
+            $tweetBody.append($tweet);
+            if (flag) {
+              $tweet.append($tweeter);
+            }
+            $tweet.append($message);
+            $tweet.append($timestamp);
+        }
+
+        function displayUser() {
+          clearTimeout(timeoutId);
+          $tweetBody.empty();
+          var selectedUser = $(this).text();
+          $('h2').text(selectedUser);
+          $('h2').append('<br><span class="home">(return home)</span>');
+          var userTweets = streams.users[selectedUser.slice(1)];
+          var numTweets = userTweets.length;
+          for (var i = 0; i < numTweets && i < 10; i++) {
+            var tweet = userTweets[numTweets - i - 1];
+            showTweet(tweet, false);
+          }
+        }
+
+        $('#all-tweets').on('click', '.tweeter', displayUser);
+
+        $('h2').on('click', '.home', function() {
+          scheduleNextDisplay();
+          $('h2').text("All Tweets");
+          $('h2').remove('.home');
+        });
       });
     </script>
   </body>
