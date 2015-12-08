@@ -28,11 +28,11 @@
 
         // Automatically display the latest tweets
         // after a random period of time
-        var scheduleNextDisplay = function(home){
+        var scheduleAllDisplay = function(){
           displayTweets();
-          timeoutId = setTimeout(scheduleNextDisplay, Math.random() * 3000);
+          timeoutId = setTimeout(scheduleAllDisplay, Math.random() * 3000);
         };
-        scheduleNextDisplay();
+        scheduleAllDisplay();
 
         function showTweet(tweet, flag) {
             var $tweet = $('<div class="tweet"></div>');
@@ -49,24 +49,22 @@
             $tweet.append($timestamp);
         }
 
-        function displayUser() {
-          clearTimeout(timeoutId);
-          $tweetBody.empty();
-          var selectedUser = $(this).text();
-          $('h2').text(selectedUser);
-          $('h2').append('<br><span class="home">(return home)</span>');
-          var userTweets = streams.users[selectedUser.slice(1)];
-          var numTweets = userTweets.length;
-          for (var i = 0; i < numTweets && i < 10; i++) {
-            var tweet = userTweets[numTweets - i - 1];
-            showTweet(tweet, false);
-          }
-        }
+        $('#all-tweets').on('click', '.tweeter', function displayUser() {
+            clearTimeout(timeoutId);
+            $tweetBody.empty();
+            var selectedUser = $(this).text();
+            $('h2').text(selectedUser);
+            $('h2').append('<br><span class="home">return home</span>');
+            var userTweets = streams.users[selectedUser.slice(1)];
+            var numTweets = userTweets.length;
+            for (var i = 0; i < numTweets && i < 10; i++) {
+              var tweet = userTweets[numTweets - i - 1];
+              showTweet(tweet, false);
+            }
+        });
 
-        $('#all-tweets').on('click', '.tweeter', displayUser);
-
-        $('h2').on('click', '.home', function() {
-          scheduleNextDisplay();
+        $('h2').on('click', '.home', function(event) {
+          scheduleAllDisplay();
           $('h2').text("All Tweets");
           $('h2').remove('.home');
         });
